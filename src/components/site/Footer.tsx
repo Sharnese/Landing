@@ -36,7 +36,7 @@ const Footer: React.FC<{
             <li><Link to="/book/appointment" className="text-[13px] text-white/50 hover:text-white/85 transition">Book Appointment</Link></li>
             <li><Link to="/use-cases" className="text-[13px] text-white/50 hover:text-white/85 transition">Use Cases</Link></li>
             <li><Link to="/admin" className="text-[13px] text-white/50 hover:text-white/85 transition">EE LOGIN</Link></li>
-            <li><a href="https://mauditready.com/tenant" className="text-[11px] text-white/30 hover:text-white/55 transition">Login</a></li>
+            <li><a href="https://mauditready.com/tenant" className="text-[11px] text-white/85 hover:text-white/55 transition">LOGIN</a></li>
 
           </ul>
         </div>
