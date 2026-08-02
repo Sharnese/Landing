@@ -2,7 +2,7 @@ import React from 'react';
 import { VALUE_PILLS } from '@/lib/brand';
 import {
   LayoutDashboard, FileText, FolderArchive, AlertCircle, BarChart3, ShieldCheck,
-  Users, Activity, ListChecks, Building2, BookOpen, GraduationCap, CheckCircle2,
+  Users, Activity, ListChecks, Building2, MessageCircle, GraduationCap, CheckCircle2,
   UserCircle, Sparkles, Pill, IdCard, LifeBuoy,
 } from 'lucide-react';
 
@@ -16,13 +16,22 @@ const Eyebrow = ({ children, light }: any) => (
 );
 
 export const ValuePills: React.FC = () => (
-  <section className="bg-white py-12 px-6 border-b border-slate-100">
+  <section className="relative bg-white py-12 px-6 border-b border-slate-100 overflow-hidden">
+    <div className="absolute inset-x-0 top-0 h-1" style={{ background: 'linear-gradient(90deg,#005DFF,#76BCFF,#006F51)' }} />
     <div className="max-w-[1200px] mx-auto">
-      <div className="text-center text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-5">Platform Capabilities</div>
+      <div className="flex justify-center"><Eyebrow>Platform Capabilities</Eyebrow></div>
       <div className="flex flex-wrap justify-center gap-2.5">
-        {VALUE_PILLS.map((p) => (
-          <div key={p} className="flex items-center gap-1.5 bg-[#F4F5FB] border border-slate-100 rounded-full px-4 py-2 text-[13px] font-medium text-[#444749] hover:border-[#76BCFF] hover:bg-[#EFF6FF] hover:-translate-y-px transition-all">
-            <CheckCircle2 className="w-4 h-4 text-[#116AEF]" /> {p}
+        {VALUE_PILLS.map((p, i) => (
+          <div
+            key={p}
+            className="flex items-center gap-1.5 border rounded-full px-4 py-2 text-[13px] font-semibold hover:-translate-y-px hover:shadow-md transition-all"
+            style={{
+              background: i % 3 === 0 ? '#EFF6FF' : i % 3 === 1 ? '#ECFDF5' : '#F4F5FB',
+              borderColor: i % 3 === 0 ? '#116AEF33' : i % 3 === 1 ? '#006F5133' : '#E2E4EE',
+              color: i % 3 === 0 ? '#0F4FB0' : i % 3 === 1 ? '#00593F' : '#444749',
+            }}
+          >
+            <CheckCircle2 className="w-4 h-4" style={{ color: i % 3 === 0 ? '#116AEF' : i % 3 === 1 ? '#006F51' : '#76BCFF' }} /> {p}
           </div>
         ))}
       </div>
@@ -41,10 +50,10 @@ const FEATURES = [
   { icon: Users, title: 'Staff Credentialing', desc: 'Know exactly who is trained, certified, and cleared to work — and who is not.' },
   { icon: Activity, title: 'Visit Verification (EVV)', desc: 'Track visits electronically, exactly the way state and federal rules require.' },
   { icon: Pill, title: 'eMAR', desc: 'Document every medication administration accurately, track counts, and keep nothing unaccounted for.' },
-  { icon: IdCard, title: 'Client Portal', desc: 'Give the people you serve a secure place to view and sign their own notes, plans, and records.' },
+  { icon: IdCard, title: 'Client Portal', desc: 'Give the people you serve a secure place to view and sign their own records, plans, and notes.' },
   { icon: ListChecks, title: 'Task Management', desc: 'Assign tasks, send reminders, and keep your team accountable without the chasing.' },
-  { icon: Building2, title: 'Programs & Locations', desc: 'Set up your programs, sites, and teams the way your organization actually runs.' },
-  { icon: BookOpen, title: 'Knowledge Base', desc: 'Give your staff one place to find policies, procedures, and answers.' },
+  { icon: Building2, title: 'Company Infrastructure', desc: 'Set up your programs, sites, and teams the way your organization actually runs.' },
+  { icon: MessageCircle, title: 'Knowledge-Based Chat', desc: 'Live chat with answers about your company — policies, procedures, contacts, HR, benefits, and more.' },
   { icon: GraduationCap, title: 'Training & Onboarding', desc: 'Get new hires trained and supported, with real people helping along the way.' },
   { icon: LifeBuoy, title: 'Help Desk', desc: 'Get real help from real people, and track every request until it is resolved.' },
 ];
@@ -81,7 +90,7 @@ const ECO_NODES = [
   { icon: Activity, label: 'EVV', x: 300, y: 470 },
   { icon: BarChart3, label: 'Reports', x: 200, y: 438 },
   { icon: Users, label: 'Staff', x: 138, y: 353 },
-  { icon: BookOpen, label: 'Knowledge', x: 138, y: 248 },
+  { icon: MessageCircle, label: 'Live Chat', x: 138, y: 248 },
   { icon: ListChecks, label: 'Tasks', x: 200, y: 163 },
 ];
 
@@ -124,10 +133,10 @@ export const Ecosystem: React.FC = () => (
 
 const SOLUTIONS = [
   ['Foster Care', 'Placement records, licensing compliance, caseworker documentation, and regulatory requirements.'],
-  ['Behavioral Health', 'Clinical documentation, service authorizations, compliance tracking, and staff credentialing.'],
-  ['IDD Services', 'Person-centered plans, support documentation, regulatory compliance, and waiver management.'],
+  ['Behavioral Health', 'Clinical documentation, service authorization reports, compliance tracking, and staff credentialing.'],
+  ['IDD Services', 'Person-centered plans, support documentation, incident tracking, and regulatory compliance.'],
   ['Residential Programs', 'Daily living documentation, incident tracking, medication records, and licensing requirements.'],
-  ['Home Care', 'EVV visits, caregiver schedules, service documentation, billing compliance, and client records.'],
+  ['Home Care', 'EVV visits, caregiver schedules, service documentation, and client records.'],
   ['Adult Services', 'Day programs, community integration, service coordination, and staff-to-participant ratios.'],
   ['Healthcare Services', 'Clinical compliance, patient records, credentialing, and quality assurance in one view.'],
   ['Human Services', 'Case management, service documentation, compliance monitoring, and program reporting.'],
@@ -210,7 +219,7 @@ export const People: React.FC = () => (
 const STEPS = [
   { t: 'Sign up', d: 'Create your account and tell us about your organization.' },
   { t: 'We reach out', d: 'We schedule your onboarding call within 48 hours.' },
-  { t: 'We set you up', d: 'Your programs, users, and workflows get configured for you.' },
+  { t: 'We support your setup', d: 'We support you in configuring your programs, users, and workflows.' },
   { t: 'Your team trains', d: 'Hands-on training with a dedicated onboarding specialist.' },
   { t: 'You go live', d: 'Start running your organization on MyHCBS, fully supported.' },
 ];

@@ -16,6 +16,32 @@ const CONFIG: Record<string, Cfg> = {
   event: { kind: 'event', title: 'Event Registration', subtitle: 'Register for upcoming MyHCBS events.', types: ['Custom Event'] },
 };
 
+// Parses a 'YYYY-MM-DD' date plus an optional 12h time string (e.g. '10:00 AM')
+// into a concrete Date. Falls back to end-of-day when no usable time is given,
+// so a session with no listed time stays visible through its scheduled date.
+const sessionEndsAt = (date?: string, time?: string): Date | null => {
+  if (!date) return null;
+  const [y, m, d] = date.split('-').map(Number);
+  if (!y || !m || !d) return null;
+  if (time) {
+    const match = time.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
+    if (match) {
+      let h = parseInt(match[1], 10);
+      const min = parseInt(match[2], 10);
+      const ampm = match[3]?.toUpperCase();
+      if (ampm === 'PM' && h !== 12) h += 12;
+      if (ampm === 'AM' && h === 12) h = 0;
+      return new Date(y, m - 1, d, h, min);
+    }
+  }
+  return new Date(y, m - 1, d, 23, 59, 59);
+};
+
+const isSessionPast = (s: any): boolean => {
+  const cutoff = sessionEndsAt(s.date, s.end_time || s.start_time);
+  return cutoff ? cutoff.getTime() < Date.now() : false;
+};
+
 const BookingPage: React.FC<{ kind: string }> = ({ kind }) => {
   const cfg = CONFIG[kind] || CONFIG.appointment;
   const [params] = useSearchParams();
@@ -37,7 +63,7 @@ const BookingPage: React.FC<{ kind: string }> = ({ kind }) => {
     let q = supabase.from('mq_appointments').select('*').in('status', ['Confirmed', 'Approved', 'New', 'Pending Review']).order('date', { ascending: true });
     if (typeFilter) q = q.eq('type', typeFilter);
     const { data } = await q;
-    const avail = (data || []).filter((s) => s.is_public !== false);
+    const avail = (data || []).filter((s) => s.is_public !== false && !isSessionPast(s));
     setSessions(avail);
     if (avail.length) setSelected(avail[0]);
     setLoading(false);
