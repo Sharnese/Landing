@@ -15,7 +15,7 @@ const Footer: React.FC<{
           }}>
               <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" className="w-[18px] h-[18px]"><path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" /></svg>
             </div>
-            Myhcbs
+            MyHCBS
           </div>
           <p className="text-[13px] text-white/45 leading-relaxed max-w-[280px]" data-mixed-content="true">{BRAND.primarySlogan} Built for human services, healthcare, and regulated industries.</p>
         </div>
@@ -42,7 +42,7 @@ const Footer: React.FC<{
         </div>
       </div>
       <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
-        <p className="text-xs text-white/35" data-mixed-content="true">© {new Date().getFullYear()} Myhcbs All rights reserved.</p>
+        <p className="text-xs text-white/35" data-mixed-content="true">© {new Date().getFullYear()} MyHCBS All rights reserved.</p>
         <div className="flex gap-5">{['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map(x => <a key={x} href="#" className="text-xs text-white/35 hover:text-white/60 transition">{x}</a>)}</div>
       </div>
     </div>
