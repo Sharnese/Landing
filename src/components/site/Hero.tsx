@@ -24,10 +24,13 @@ const Hero: React.FC<{ onDemo: () => void; onGetStarted?: () => void }> = ({ onD
             Enterprise Quality & Compliance Platform
           </div>
           <h1 className="font-black leading-[1.08] tracking-tight text-[#0F172A] mb-5" style={{ fontSize: 'clamp(36px,5vw,56px)' }}>
-            Built for <span className="text-[#116AEF]">Compliance.</span><br />Designed for <span className="text-[#006F51]">Care.</span>
+            Stay <span className="text-[#116AEF]">Audit Ready.</span><br />Know Your <span className="text-[#006F51]">Status.</span>
           </h1>
+          <p className="text-[17px] text-slate-500 leading-relaxed max-w-[520px] mb-2">
+            Stop preparing for your audit. Stay ready — all the time.
+          </p>
           <p className="text-[17px] text-slate-500 leading-relaxed max-w-[520px] mb-9">
-            Quality, compliance, care, records, reporting, EVV, onboarding, and operational oversight — connected in one intelligent system.
+            Real-time data, driving quality services. MyHCBS takes the guessing out of it.
           </p>
           <div className="flex gap-3.5 flex-wrap mb-12">
             <button onClick={onDemo} className="inline-flex items-center gap-2 bg-white text-[#0F172A] text-[15px] font-semibold px-7 py-3.5 rounded-xl border-[1.5px] border-slate-200 shadow-sm hover:border-[#116AEF] hover:-translate-y-0.5 transition-all">

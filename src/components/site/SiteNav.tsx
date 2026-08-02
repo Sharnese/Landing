@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 
 const NAV_LINKS = [
   { label: 'Features', href: '#features' },
   { label: 'Solutions', href: '#solutions' },
+  { label: 'Use Cases', href: '/use-cases' },
   { label: 'Onboarding', href: '#onboarding' },
   { label: 'Appointments', href: '#appointments' },
   { label: 'Resources', href: '#resources' },
   { label: 'Contact', href: '#contact' },
 ];
+
+const NavLink: React.FC<{ href: string; className: string; onClick?: () => void; children: React.ReactNode }> = ({ href, className, onClick, children }) =>
+  href.startsWith('/') ? (
+    <Link to={href} onClick={onClick} className={className}>{children}</Link>
+  ) : (
+    <a href={href} onClick={onClick} className={className}>{children}</a>
+  );
 
 const Logo = () => (
   <a href="#top" className="flex items-center gap-2.5 font-extrabold text-[20px] tracking-tight text-[#0F172A]">
@@ -39,7 +48,7 @@ const SiteNav: React.FC<{ onGetStarted?: () => void }> = ({ onGetStarted }) => {
         <ul className="hidden lg:flex items-center gap-1 list-none">
           {NAV_LINKS.map((l) => (
             <li key={l.label}>
-              <a href={l.href} className="text-sm font-medium text-slate-500 px-3.5 py-1.5 rounded-lg hover:text-[#0F172A] hover:bg-[#F4F5FB] transition-colors">{l.label}</a>
+              <NavLink href={l.href} className="text-sm font-medium text-slate-500 px-3.5 py-1.5 rounded-lg hover:text-[#0F172A] hover:bg-[#F4F5FB] transition-colors">{l.label}</NavLink>
             </li>
           ))}
         </ul>
@@ -48,7 +57,7 @@ const SiteNav: React.FC<{ onGetStarted?: () => void }> = ({ onGetStarted }) => {
       {open && (
         <div className="md:hidden bg-white border-b border-slate-200 px-6 py-4 flex flex-col gap-2">
           {NAV_LINKS.map((l) => (
-            <a key={l.label} href={l.href} onClick={() => setOpen(false)} className="text-sm font-medium text-slate-600 py-2">{l.label}</a>
+            <NavLink key={l.label} href={l.href} onClick={() => setOpen(false)} className="text-sm font-medium text-slate-600 py-2">{l.label}</NavLink>
           ))}
         </div>
       )}
