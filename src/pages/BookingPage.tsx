@@ -117,9 +117,7 @@ const BookingPage: React.FC<{ kind: string }> = ({ kind }) => {
       <div className="max-w-[560px] mx-auto">
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 font-extrabold text-xl text-[#0F172A] mb-3">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#005DFF,#76BCFF)' }}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" className="w-4 h-4"><path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" /></svg>
-            </div>MyHCBS
+            <img src="/images/logo-icon.png" alt="MyHCBS logo" className="w-8 h-8 object-contain" />MyHCBS
           </div>
           <h1 className="text-2xl font-extrabold text-[#0F172A] tracking-tight">{cfg.title}</h1>
           <p className="text-sm text-slate-500 mt-2 max-w-md mx-auto">{cfg.subtitle}</p>

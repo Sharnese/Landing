@@ -38,10 +38,8 @@ const AdminLayout: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#F4F5FB] font-[Inter] flex">
       <aside className={`fixed lg:static z-40 inset-y-0 left-0 w-64 bg-[#0F172A] flex flex-col transition-transform ${open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
-        <div className="px-5 py-5 flex items-center gap-2.5 font-extrabold text-white text-lg border-b border-white/10">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#005DFF,#76BCFF)' }}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" className="w-4 h-4"><path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" /></svg>
-          </div>MyHCBS.OS
+        <div className="px-5 py-5 flex items-center gap-2 font-extrabold text-white text-lg border-b border-white/10">
+          <img src="/images/logo-icon.png" alt="MyHCBS logo" className="w-8 h-8 object-contain" />MyHCBS
         </div>
         <nav className="flex-1 overflow-y-auto py-3 px-3 space-y-0.5">
           {NAV.map(([to, label, Icon]) => (
