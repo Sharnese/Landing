@@ -20,9 +20,12 @@ const NavLink: React.FC<{ href: string; className: string; onClick?: () => void;
   );
 
 const Logo = () => (
-  <a href="#top" className="flex items-center gap-2 font-extrabold text-[20px] tracking-tight text-[#0F172A]">
-    <img src="/images/logo-icon.png" alt="MyHCBS logo" className="w-9 h-9 object-contain" />
-    <span><span className="text-[#116AEF]">my</span>HCBS</span>
+  <a href="#top" className="flex items-center gap-2 tracking-tight text-[#0F172A]">
+    <img src="/images/logo-icon.png" alt="MyHCBS logo" className="w-9 h-9 object-contain shrink-0" />
+    <span className="flex flex-col leading-none">
+      <span className="font-extrabold text-[20px]"><span className="text-[#116AEF]">my</span>HCBS</span>
+      <span className="text-[7px] font-bold text-slate-400 uppercase tracking-widest mt-1">Health Care Based Software</span>
+    </span>
   </a>
 );
 

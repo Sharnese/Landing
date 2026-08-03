@@ -9,10 +9,11 @@ const Footer: React.FC<{
     <div className="max-w-[1200px] mx-auto">
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
         <div>
-          <div className="flex items-center gap-2 font-extrabold text-lg text-white mb-3">
+          <div className="flex items-center gap-2 font-extrabold text-lg text-white mb-1">
             <img src="/images/logo-icon.png" alt="MyHCBS logo" className="w-9 h-9 object-contain" />
             <span><span className="text-[#76BCFF]">my</span>HCBS</span>
           </div>
+          <div className="text-[9px] font-bold text-white/35 uppercase tracking-widest mb-3">Health Care Based Software</div>
           <p className="text-[13px] text-white/45 leading-relaxed max-w-[280px]" data-mixed-content="true">{BRAND.primarySlogan} Built for human services, healthcare, and regulated industries.</p>
         </div>
         <div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { crmSubscribe } from '@/lib/brand';
+import { getAppointmentTabBySlug } from '@/lib/appointmentTypes';
 import { Check, Clock, Calendar, Users } from 'lucide-react';
 
 const inputCls = 'w-full bg-white border-[1.5px] border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#116AEF] focus:ring-2 focus:ring-[#116AEF]/10 transition';
@@ -59,9 +60,9 @@ const BookingPage: React.FC<{ kind: string }> = ({ kind }) => {
 
   const load = async () => {
     setLoading(true);
-    const typeFilter = cfg.kind === 'office-hours' ? 'Office Hours' : cfg.kind === 'training' ? 'Training' : cfg.kind === 'event' ? 'Custom Event' : null;
+    const typeFilter = getAppointmentTabBySlug(cfg.kind)?.typeFilter || null;
     let q = supabase.from('mq_appointments').select('*').in('status', ['Confirmed', 'Approved', 'New', 'Pending Review']).order('date', { ascending: true });
-    if (typeFilter) q = q.eq('type', typeFilter);
+    if (typeFilter) q = q.in('type', typeFilter);
     const { data } = await q;
     const avail = (data || []).filter((s) => s.is_public !== false && !isSessionPast(s));
     setSessions(avail);
