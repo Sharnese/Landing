@@ -13,7 +13,7 @@ const Metric = ({ label, val, tag, tagColor }: any) => (
 const Hero: React.FC<{ onDemo: () => void; onGetStarted?: () => void }> = ({ onDemo }) => {
 
   return (
-    <section id="top" className="pt-[68px] min-h-screen flex items-center relative overflow-hidden"
+    <section id="top" className="pt-[76px] min-h-screen flex items-center relative overflow-hidden"
       style={{ background: 'linear-gradient(160deg,#EFF6FF 0%,#F4F5FB 60%,#fff 100%)' }}>
       <div className="absolute w-[600px] h-[600px] rounded-full blur-[80px] opacity-50 -top-[150px] -right-[100px]" style={{ background: 'radial-gradient(circle,rgba(17,106,239,0.18),transparent 70%)' }} />
       <div className="absolute w-[400px] h-[400px] rounded-full blur-[80px] opacity-40 bottom-0 left-24" style={{ background: 'radial-gradient(circle,rgba(0,111,81,0.15),transparent 70%)' }} />

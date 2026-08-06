@@ -4,7 +4,7 @@ import { Navigate, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Users, Presentation, PhoneCall, Building2, CalendarClock,
   BookOpen, Mail, Webhook, FileEdit, CalendarRange, CalendarCheck2,
-  ShieldCheck as ShieldUser, UserCog, Settings, LogOut, Menu,
+  ShieldCheck as ShieldUser, UserCog, Settings, LogOut, Menu, GraduationCap, Tag, Eye,
 } from 'lucide-react';
 
 const NAV = [
@@ -17,6 +17,9 @@ const NAV = [
   ['/admin/subscribers', 'Subscribers', Building2],
   ['/admin/appointments', 'Appointments', CalendarClock],
   ['/admin/use-cases', 'Use Cases', BookOpen],
+  ['/admin/learning-center', 'Learning Center', GraduationCap],
+  ['/admin/pricing', 'Pricing', Tag],
+  ['/admin/page-visibility', 'Page Visibility', Eye],
 
   ['/admin/chatbot', 'Chatbot Knowledge', BookOpen],
   ['/admin/email-templates', 'Email Templates', Mail],
