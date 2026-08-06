@@ -51,8 +51,7 @@ export const SERVICE_TYPES = [
 ];
 
 export const VALUE_PILLS = [
-  'Compliance Dashboard', 'Compliance Manager', 'AI Trend Insights', 'Custom Forms',
-  'Records Management', 'Incident Tracking', 'Reports & Analytics', 'Staff Credentialing',
-  'Visit Verification (EVV)', 'eMAR', 'Client Portal', 'Task Management',
-  'Company Infrastructure', 'Knowledge-Based Chat', 'Training & Onboarding', 'Help Desk',
+  'Quality Care', 'Compliance Management', 'Real-Time Dashboards', 'Records Management',
+  'Dynamic Forms', 'EVV Support', 'Employee Compliance', 'Incident Management',
+  'Reporting & Analytics', 'Knowledge Base', 'Training & Onboarding', 'All in One System',
 ];

@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AdminAuthProvider } from "@/contexts/AdminAuth";
-import { PageVisibilityProvider, GatedPage } from "@/contexts/PageVisibility";
 
 import Landing from "./pages/Landing";
 import BookingPage from "./pages/BookingPage";
@@ -13,8 +12,6 @@ import NotFound from "./pages/NotFound";
 import SignIn from "./pages/SignIn";
 import UseCases from "./pages/UseCases";
 import UseCaseDetail from "./pages/UseCaseDetail";
-import LearningCenter from "./pages/LearningCenter";
-import Pricing from "./pages/Pricing";
 
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminLayout from "./pages/admin/AdminLayout";
@@ -31,9 +28,10 @@ import Settings from "./pages/admin/Settings";
 import UseCasesAdmin from "./pages/admin/UseCasesAdmin";
 import DemoCalendar from "./pages/admin/DemoCalendar";
 import Availability from "./pages/admin/Availability";
-import PageVisibility from "./pages/admin/PageVisibility";
-import LearningCenterAdmin from "./pages/admin/LearningCenterAdmin";
-import PricingAdmin from "./pages/admin/PricingAdmin";
+// Learning Center is not finished yet — hidden from the public.
+// The page/component is still in the codebase; just uncomment this
+// import and the two routes below to bring it back.
+// import LearningCenter from "./pages/LearningCenter";
 
 const queryClient = new QueryClient();
 
@@ -47,16 +45,15 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <AdminAuthProvider>
-            <PageVisibilityProvider>
             <Routes>
               <Route path="/" element={<Landing />} />
               <Route path="/signin" element={<SignIn />} />
               <Route path="/login" element={<SignIn />} />
               <Route path="/use-cases" element={<UseCases />} />
               <Route path="/use-cases/:slug" element={<UseCaseDetail />} />
-              <Route path="/learning-center" element={<GatedPage pageKey="learning_center"><LearningCenter /></GatedPage>} />
-              <Route path="/learn" element={<GatedPage pageKey="learning_center"><LearningCenter /></GatedPage>} />
-              <Route path="/pricing" element={<GatedPage pageKey="pricing"><Pricing /></GatedPage>} />
+              {/* Hidden until finished — uncomment to re-enable publicly */}
+              {/* <Route path="/learning-center" element={<LearningCenter />} /> */}
+              {/* <Route path="/learn" element={<LearningCenter />} /> */}
               <Route path="/book/appointment" element={<BookingPage kind="appointment" />} />
               <Route path="/book/office-hours" element={<BookingPage kind="office-hours" />} />
               <Route path="/book/training" element={<BookingPage kind="training" />} />
@@ -73,9 +70,6 @@ const App = () => (
                 <Route path="/admin/demo-calendar" element={<DemoCalendar />} />
                 <Route path="/admin/availability" element={<Availability />} />
                 <Route path="/admin/use-cases" element={<UseCasesAdmin />} />
-                <Route path="/admin/learning-center" element={<LearningCenterAdmin />} />
-                <Route path="/admin/pricing" element={<PricingAdmin />} />
-                <Route path="/admin/page-visibility" element={<PageVisibility />} />
                 <Route path="/admin/chatbot" element={<ChatbotAdmin />} />
                 <Route path="/admin/email-templates" element={<EmailTemplates />} />
                 <Route path="/admin/webhooks" element={<Webhooks />} />
@@ -87,7 +81,6 @@ const App = () => (
 
               <Route path="*" element={<NotFound />} />
             </Routes>
-            </PageVisibilityProvider>
           </AdminAuthProvider>
         </BrowserRouter>
       </TooltipProvider>

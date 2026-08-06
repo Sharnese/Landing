@@ -4,9 +4,62 @@ import { BRAND } from '@/lib/brand';
 import { PageHeader, Card, Badge, Btn, Modal, Field, inputCls, Empty } from './ui';
 import { Plus, Copy, Link2, Users, Trash2, CheckCircle2, Send, CalendarPlus, AlertTriangle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { APPOINTMENT_TABS as TABS, type AppointmentTabCfg as TabCfg } from '@/lib/appointmentTypes';
 
 const STATUSES = ['New', 'Pending Review', 'Approved', 'Alternative Sent', 'Confirmed', 'Full', 'Cancelled', 'Completed', 'No-Show'];
+
+type TabCfg = {
+  key: string;
+  label: string;
+  title: string;
+  sub: string;
+  types: string[];
+  defaultType: string;
+  typeFilter?: string[];
+  publicSlug?: string;
+};
+
+const TABS: TabCfg[] = [
+  {
+    key: 'appointments',
+    label: 'Appointments',
+    title: 'Appointments',
+    sub: 'Demos, onboarding, walkthroughs, and general appointments.',
+    types: ['Demo', 'Onboarding', 'Q&A Session', 'Product Walkthrough', 'General Appointment'],
+    defaultType: 'General Appointment',
+    typeFilter: ['Demo', 'Onboarding', 'Q&A Session', 'Product Walkthrough', 'General Appointment'],
+    publicSlug: 'appointment',
+  },
+  {
+    key: 'office-hours',
+    label: 'Office Hours',
+    title: 'Office Hours',
+    sub: 'Live office hours sessions.',
+    types: ['Office Hours'],
+    defaultType: 'Office Hours',
+    typeFilter: ['Office Hours'],
+    publicSlug: 'office-hours',
+  },
+  {
+    key: 'training',
+    label: 'Training Sessions',
+    title: 'Training Sessions',
+    sub: 'Customer and department training.',
+    types: ['New Customer Training', 'Department Training', 'Program Training', 'Form Builder Training', 'Dashboard Training', 'Reporting Training', 'Compliance Training', 'EVV Training', 'Knowledge Base Training', 'Custom Training', 'Training'],
+    defaultType: 'New Customer Training',
+    typeFilter: ['Training', 'New Customer Training', 'Department Training', 'Program Training', 'Form Builder Training', 'Dashboard Training', 'Reporting Training', 'Compliance Training', 'EVV Training', 'Knowledge Base Training', 'Custom Training'],
+    publicSlug: 'training',
+  },
+  {
+    key: 'events',
+    label: 'Events',
+    title: 'Events',
+    sub: 'Custom events and registrations.',
+    types: ['Custom Event'],
+    defaultType: 'Custom Event',
+    typeFilter: ['Custom Event'],
+    publicSlug: 'event',
+  },
+];
 
 const blank = (t: string) => ({ type: t, title: '', description: '', date: '', start_time: '', end_time: '', time_zone: 'Eastern Time (ET)', host: '', specialist: '', meeting_link: '', participant_limit: 25, seats_booked: 0, registration_deadline: '', status: 'New', internal_notes: '', is_public: true });
 
