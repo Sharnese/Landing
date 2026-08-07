@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { supabase } from '@/lib/supabase';
 import DemoModal from '@/components/DemoModal';
-import { toast } from 'sonner';
 import {
   ArrowLeft, PlayCircle, FileText, Presentation, Bot, BookOpen,
-  Video, Download, MessageSquare, Search, HelpCircle, Compass, Sparkles,
+  Video, Download, MessageSquare, Search, HelpCircle, Compass, Sparkles, Loader2,
 } from 'lucide-react';
+
+type ResourceRow = { id: string; kind: 'video' | 'file'; title: string; url: string };
+type ModuleRow = { id: string; name: string; description: string | null; resources: ResourceRow[] };
 
 const TopBar: React.FC<{ onDemo: () => void }> = ({ onDemo }) => (
   <div className="h-[68px] bg-white border-b border-slate-200/60 flex items-center px-6 sticky top-0 z-30">
@@ -30,24 +33,24 @@ const Section: React.FC<{ id?: string; icon: React.ReactNode; title: string; sub
 
 const card = 'bg-white rounded-2xl border border-slate-100 shadow-sm p-5';
 
-const MANUALS = [
-  { role: 'Administrator', desc: 'Org setup, user roles, billing, system configuration, and compliance settings.' },
-  { role: 'Supervisor', desc: 'Team oversight, approvals, reporting, and managing individual records.' },
-  { role: 'End User', desc: 'Day-to-day workflows: forms, visit verification, and documentation.' },
-];
-
-const VIDEO_LIBRARY: { module: string; videos: string[] }[] = [
-  { module: 'Getting Started', videos: ['Platform Overview', 'Navigation Basics', 'Your First Login'] },
-  { module: 'Compliance Dashboard', videos: ['Dashboard Tour', 'Reading Compliance Scores', 'Alerts & Tasks'] },
-  { module: 'My Individuals', videos: ['Adding Individuals', 'ISP & Care Plans', 'Records Overview'] },
-  { module: 'Form Builder', videos: ['Building a Form', 'Conditional Logic', 'Publishing Forms'] },
-  { module: 'Records Management', videos: ['Document Storage', 'Version History', 'Audit Trails'] },
-  { module: 'Employee Compliance', videos: ['Credential Tracking', 'Training Records', 'Expiration Alerts'] },
-];
-
 const LearningCenter: React.FC = () => {
   const [demo, setDemo] = useState(false);
-  const request = (label: string) => toast.success(`Thanks! We'll send the ${label} to your inbox — book a demo for instant access.`);
+  const [modules, setModules] = useState<ModuleRow[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      const { data: mods } = await supabase.from('mq_learning_modules').select('*').order('sort_order', { ascending: true });
+      const ids = (mods || []).map((m: any) => m.id);
+      let byModule: Record<string, ResourceRow[]> = {};
+      if (ids.length) {
+        const { data: res } = await supabase.from('mq_learning_resources').select('*').in('module_id', ids).order('sort_order', { ascending: true });
+        (res || []).forEach((r: any) => { (byModule[r.module_id] = byModule[r.module_id] || []).push(r); });
+      }
+      setModules((mods || []).map((m: any) => ({ ...m, resources: byModule[m.id] || [] })));
+      setLoading(false);
+    })();
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#F4F5FB] font-[Inter]">
@@ -58,7 +61,7 @@ const LearningCenter: React.FC = () => {
         <div className="max-w-[1100px] mx-auto px-6 py-14 text-center">
           <div className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide mb-3.5 text-[#116AEF]"><Sparkles className="w-3.5 h-3.5" /> Learning Center</div>
           <h1 className="font-extrabold text-[#0F172A] tracking-tight mb-3" style={{ fontSize: 'clamp(28px,4vw,42px)' }}>Everything you need to master MyHCBS</h1>
-          <p className="text-base text-slate-500 max-w-[600px] mx-auto">Recorded presentations, downloadable decks, training manuals, a video library, and an AI knowledge base — all in one place.</p>
+          <p className="text-base text-slate-500 max-w-[600px] mx-auto">Recorded presentations, training videos, and downloadable manuals — organized by module, all in one place.</p>
         </div>
       </div>
 
@@ -71,20 +74,6 @@ const LearningCenter: React.FC = () => {
               <PlayCircle className="w-16 h-16" />
               <span className="text-sm font-semibold">Watch the MyHCBS Overview</span>
             </button>
-          </div>
-        </Section>
-
-        {/* Downloadable Presentation Deck */}
-        <Section icon={<Presentation className="w-5 h-5" />} title="Downloadable Presentation Deck" sub="Share MyHCBS with your team and stakeholders.">
-          <div className={card + ' flex flex-col md:flex-row md:items-center gap-5'}>
-            <div className="flex-1">
-              <ul className="grid sm:grid-cols-2 gap-2 text-sm text-slate-600">
-                {['Platform Overview', 'Core Modules', 'Industry Use Cases', 'Implementation Process', 'Customer Benefits'].map((x) => (
-                  <li key={x} className="flex items-center gap-2"><FileText className="w-4 h-4 text-[#116AEF]" /> {x}</li>
-                ))}
-              </ul>
-            </div>
-            <button onClick={() => request('presentation deck')} className="text-white text-sm font-semibold px-5 py-3 rounded-xl inline-flex items-center gap-2 shrink-0" style={{ background: 'linear-gradient(135deg,#005DFF,#76BCFF)' }}><Download className="w-4 h-4" /> Get the Deck</button>
           </div>
         </Section>
 
@@ -113,7 +102,7 @@ const LearningCenter: React.FC = () => {
               { icon: <MessageSquare className="w-5 h-5" />, t: 'AI Chat Assistant', d: 'Ask anything about MyHCBS and get instant answers.', to: '/' },
               { icon: <Search className="w-5 h-5" />, t: 'Searchable Documentation', d: 'Browse detailed product docs by topic.', to: '/use-cases' },
               { icon: <HelpCircle className="w-5 h-5" />, t: 'Frequently Asked Questions', d: 'Quick answers to common questions.', to: '/' },
-              { icon: <Compass className="w-5 h-5" />, t: 'Guided Walkthroughs', d: 'Step-by-step tours of every module.', to: '#video-library' },
+              { icon: <Compass className="w-5 h-5" />, t: 'Guided Walkthroughs', d: 'Step-by-step tours of every module.', to: '#modules' },
             ].map((c) => (
               c.to.startsWith('#')
                 ? <a key={c.t} href={c.to} className={card + ' hover:-translate-y-1 transition-all block'}><div className="text-[#116AEF] mb-2">{c.icon}</div><h4 className="font-bold text-sm text-[#0F172A] mb-1">{c.t}</h4><p className="text-xs text-slate-500">{c.d}</p></a>
@@ -122,37 +111,52 @@ const LearningCenter: React.FC = () => {
           </div>
         </Section>
 
-        {/* PDF Training Manuals */}
-        <Section icon={<BookOpen className="w-5 h-5" />} title="PDF Training Manuals" sub="Role-based manuals for every user in your organization.">
-          <div className="grid sm:grid-cols-3 gap-4">
-            {MANUALS.map((m) => (
-              <div key={m.role} className={card}>
-                <div className="flex items-center gap-2 mb-2"><FileText className="w-4 h-4 text-[#116AEF]" /><h4 className="font-bold text-sm text-[#0F172A]">{m.role} Manual</h4></div>
-                <p className="text-xs text-slate-500 mb-4">{m.desc}</p>
-                <button onClick={() => request(`${m.role} manual`)} className="text-[#116AEF] text-xs font-semibold inline-flex items-center gap-1.5 border border-slate-200 rounded-lg px-3 py-2 hover:border-[#116AEF]"><Download className="w-3.5 h-3.5" /> Download PDF</button>
-              </div>
-            ))}
-          </div>
-        </Section>
+        {/* Module Library — videos and digital manuals, managed per module from Admin */}
+        <Section id="modules" icon={<BookOpen className="w-5 h-5" />} title="Module Library" sub="Training videos and downloadable manuals, organized by module.">
+          {loading ? (
+            <div className="flex justify-center py-10 text-slate-400"><Loader2 className="w-5 h-5 animate-spin" /></div>
+          ) : modules.length === 0 ? (
+            <div className={card + ' text-center text-sm text-slate-400 py-10'}>Module resources are on the way — check back soon, or book a demo for a full walkthrough.</div>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {modules.map((m) => {
+                const videos = m.resources.filter((r) => r.kind === 'video');
+                const files = m.resources.filter((r) => r.kind === 'file');
+                return (
+                  <div key={m.id} className={card}>
+                    <h4 className="font-bold text-sm text-[#0F172A] mb-1">{m.name}</h4>
+                    {m.description && <p className="text-xs text-slate-500 mb-3">{m.description}</p>}
 
-        {/* Training Video Library */}
-        <Section id="video-library" icon={<Video className="w-5 h-5" />} title="Training Video Library" sub="Browse training videos organized by module.">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {VIDEO_LIBRARY.map((m) => (
-              <div key={m.module} className={card}>
-                <h4 className="font-bold text-sm text-[#0F172A] mb-3">{m.module}</h4>
-                <ul className="space-y-2">
-                  {m.videos.map((v) => (
-                    <li key={v}>
-                      <button onClick={() => request(`"${v}" training video`)} className="w-full text-left flex items-center gap-2 text-[13px] text-slate-600 hover:text-[#116AEF]">
-                        <PlayCircle className="w-4 h-4 text-[#116AEF] shrink-0" /> {v}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+                    {videos.length > 0 && (
+                      <ul className="space-y-2 mb-3">
+                        {videos.map((v) => (
+                          <li key={v.id}>
+                            <a href={v.url} target="_blank" rel="noreferrer" className="w-full text-left flex items-center gap-2 text-[13px] text-slate-600 hover:text-[#116AEF]">
+                              <Video className="w-4 h-4 text-[#116AEF] shrink-0" /> {v.title}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
+                    {files.length > 0 && (
+                      <ul className="space-y-2">
+                        {files.map((f) => (
+                          <li key={f.id}>
+                            <a href={f.url} target="_blank" rel="noreferrer" download className="w-full text-left flex items-center gap-2 text-[13px] text-slate-600 hover:text-[#116AEF]">
+                              <Download className="w-4 h-4 text-[#116AEF] shrink-0" /> {f.title}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
+                    {videos.length === 0 && files.length === 0 && <p className="text-xs text-slate-400">Content coming soon.</p>}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </Section>
       </div>
 

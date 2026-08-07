@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { crmSubscribe } from '@/lib/brand';
+import { getAppointmentTabBySlug } from '@/lib/appointmentTypes';
 import { Check, Clock, Calendar, Users } from 'lucide-react';
 
 const inputCls = 'w-full bg-white border-[1.5px] border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#116AEF] focus:ring-2 focus:ring-[#116AEF]/10 transition';
@@ -14,6 +15,32 @@ const CONFIG: Record<string, Cfg> = {
   'office-hours': { kind: 'office-hours', title: 'Live Office Hours', subtitle: 'Register for open Q&A sessions with our specialists.', types: ['Office Hours'] },
   training: { kind: 'training', title: 'Training Appointment', subtitle: 'Reserve your spot in a MyHCBS training session. Each customer receives 6 complimentary training hours.', types: ['New Customer Training', 'Department Training', 'Dashboard Training', 'Reporting Training', 'Compliance Training', 'EVV Training'] },
   event: { kind: 'event', title: 'Event Registration', subtitle: 'Register for upcoming MyHCBS events.', types: ['Custom Event'] },
+};
+
+// Parses a 'YYYY-MM-DD' date plus an optional 12h time string (e.g. '10:00 AM')
+// into a concrete Date. Falls back to end-of-day when no usable time is given,
+// so a session with no listed time stays visible through its scheduled date.
+const sessionEndsAt = (date?: string, time?: string): Date | null => {
+  if (!date) return null;
+  const [y, m, d] = date.split('-').map(Number);
+  if (!y || !m || !d) return null;
+  if (time) {
+    const match = time.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
+    if (match) {
+      let h = parseInt(match[1], 10);
+      const min = parseInt(match[2], 10);
+      const ampm = match[3]?.toUpperCase();
+      if (ampm === 'PM' && h !== 12) h += 12;
+      if (ampm === 'AM' && h === 12) h = 0;
+      return new Date(y, m - 1, d, h, min);
+    }
+  }
+  return new Date(y, m - 1, d, 23, 59, 59);
+};
+
+const isSessionPast = (s: any): boolean => {
+  const cutoff = sessionEndsAt(s.date, s.end_time || s.start_time);
+  return cutoff ? cutoff.getTime() < Date.now() : false;
 };
 
 const BookingPage: React.FC<{ kind: string }> = ({ kind }) => {
@@ -33,11 +60,11 @@ const BookingPage: React.FC<{ kind: string }> = ({ kind }) => {
 
   const load = async () => {
     setLoading(true);
-    const typeFilter = cfg.kind === 'office-hours' ? 'Office Hours' : cfg.kind === 'training' ? 'Training' : cfg.kind === 'event' ? 'Custom Event' : null;
+    const typeFilter = getAppointmentTabBySlug(cfg.kind)?.typeFilter || null;
     let q = supabase.from('mq_appointments').select('*').in('status', ['Confirmed', 'Approved', 'New', 'Pending Review']).order('date', { ascending: true });
-    if (typeFilter) q = q.eq('type', typeFilter);
+    if (typeFilter) q = q.in('type', typeFilter);
     const { data } = await q;
-    const avail = (data || []).filter((s) => s.is_public !== false);
+    const avail = (data || []).filter((s) => s.is_public !== false && !isSessionPast(s));
     setSessions(avail);
     if (avail.length) setSelected(avail[0]);
     setLoading(false);
@@ -91,9 +118,7 @@ const BookingPage: React.FC<{ kind: string }> = ({ kind }) => {
       <div className="max-w-[560px] mx-auto">
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 font-extrabold text-xl text-[#0F172A] mb-3">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#005DFF,#76BCFF)' }}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" className="w-4 h-4"><path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" /></svg>
-            </div>MyHCBS
+            <img src="/images/logo-icon.png" alt="MyHCBS logo" className="w-8 h-8 object-contain" />MyHCBS
           </div>
           <h1 className="text-2xl font-extrabold text-[#0F172A] tracking-tight">{cfg.title}</h1>
           <p className="text-sm text-slate-500 mt-2 max-w-md mx-auto">{cfg.subtitle}</p>

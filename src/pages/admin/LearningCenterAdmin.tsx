@@ -180,7 +180,7 @@ const ResourceColumn: React.FC<{
   icon: React.ReactNode; label: string; accept: string; items: ResourceRow[]; moduleId: string; kind: 'video' | 'file';
   titleValue: string; onTitleChange: (v: string) => void; busy: boolean; err?: string;
   onUpload: (file: File | null) => void; onRemove: (r: ResourceRow) => void;
-}> = ({ icon, label, accept, items, titleValue, onTitleChange, busy, err, onUpload, onRemove }) => {
+}> = ({ icon, label, accept, items, moduleId, kind, titleValue, onTitleChange, busy, err, onUpload, onRemove }) => {
   const [file, setFile] = useState<File | null>(null);
   const inputId = React.useId();
   return (
